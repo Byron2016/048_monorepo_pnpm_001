@@ -67,4 +67,10 @@ We are going to use
 
 # Steps
 
+- Add package.json file
+
+  ```bash
+  pnpm init
+  ```
+
 -
