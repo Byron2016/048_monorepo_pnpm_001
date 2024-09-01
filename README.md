@@ -81,7 +81,7 @@ We are going to use
   pnpm add -D prettier
   ```
 
-      - Add .prettierignore file
+  - Add .prettierignore file
 
   ```bash
   touch .prettierignore
@@ -124,3 +124,46 @@ We are going to use
   ```
 
   - Add esben.prettier-vscode extension to VSCode.
+
+- ESLint
+
+  - Add ESLint dev dependency
+
+  ```bash
+  pnpm create @eslint/config
+
+  # ? How would you like to use ESLint?         · To check syntax only
+  # How would you like to use ESLint?           · problems
+  # What type of modules does your project use? · esm
+  # Which framework does your project use?      · none
+  # Does your project use TypeScript?           · typescript
+  # Where does your code run?                   · browser
+  # The config that you have selected requires the following dependencies:
+  #  --> eslint, globals, @eslint/js, typescript-eslint
+  # ? Would you like to install them now?       ·  Yes
+  # Which package manager do you want to use?   · pnpm
+  ```
+
+  - Add eslint-config-prettier to aboit prettier and ESLint confligs
+
+  ```bash
+  pnpm i -D eslint-config-prettier
+  ```
+
+  ```javascript
+  	....
+  	import eslintConfigPrettier from 'eslint-config-prettier';
+
+  	export default [
+  		....
+  		eslintConfigPrettier,
+  	];
+  ```
+
+  - Add package.json scrpts
+
+  ```bash
+  npm pkg set scripts.lint:nofix="eslint ."
+  npm pkg set scripts.lint="eslint . --fix"
+  npm pkg set scripts.lint:inspect:write="eslint --inspect-config"
+  ```
