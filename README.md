@@ -107,3 +107,20 @@ We are going to use
   npm pkg set scripts.format="pnpm prettier --check"
   npm pkg set scripts.format:write="pnpm prettier --write"
   ```
+
+- Add .vscode
+
+  - Add and configure .vscode settings.json
+
+  ```bash
+  mkdir .vscode
+  cd .vscode
+  touch settings.json
+  echo "{
+  \"editor.formatOnSave\": true,
+  \"editor.defaultFormatter\": \"esbenp.prettier-vscode\"
+  }" > settings.json
+  cd ..
+  ```
+
+  - Add esben.prettier-vscode extension to VSCode.
