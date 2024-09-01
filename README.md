@@ -195,3 +195,110 @@ We are going to use
     }
   }
   ```
+
+- Worksapaces
+
+  - Add workspaces definition file
+
+  ```bash
+    touch pnpm-workspace.yaml
+    echo "packages:
+  - 'apps/*'
+  - 'packages/*'" > pnpm-workspace.yaml
+
+  ```
+
+  - Add apps and libs folders
+
+  ```bash
+    mkdir apps libs
+
+  ```
+
+  - Create a vite project
+
+  ```bash
+    cd libs
+    pnpm create vite utils
+
+  # ? Select a framework:         · Vanilla
+  # ? Select a variant:           · TypeScript
+  # What type of modules does your project use? · esm
+  # Which framework does your project use?      · none
+  # Does your project use TypeScript?           · typescript
+  # Where does your code run?                   · browser
+  # The config that you have selected requires the following dependencies:
+  #  --> eslint, globals, @eslint/js, typescript-eslint
+  # ? Would you like to install them now?       ·  Yes
+  # Which package manager do you want to use?   · pnpm
+
+    pnpm i
+    cd ..
+
+  ```
+
+  - Delete files / folders
+
+  ```bash
+  cd libs/utils
+  rm index.html
+  rm -rf public
+  cd src
+  rm style.css typescript.svg counter.ts
+  cd ../../..
+
+  ```
+
+  - Add utils/package.json scrpts
+
+  ```bash
+  cd libs/utils
+  npm pkg set scripts.dev="pnpm run build --watch"
+  npm pkg set scripts.dev:old="vite"
+  cd ../..
+  ```
+
+  Note: dev script: so that any change in the code will rebuild automatically and reflect in the **web-app** in real-time
+
+  - Update utils/src/main.ts
+
+  ```javascript
+  export const isEmpty = (data: unknown) => {
+    if (data === null || data === undefined) {
+      return 'It is Empty';
+    }
+    return 'It is Empty';
+  };
+  ```
+
+  - Add vite-plugin-dts dependency
+
+  ```bash
+  cd libs/utils
+  pnpm i -D vite-plugin-dts
+  pnpm i -D @types/node # to avoid errors in vite-config.ts "Cannot find module 'path' or its corresponding type declarations"
+  cd ../..
+  ```
+
+  - Update libs/utils/package.json
+
+  ```bash
+  cd libs/utils
+  npm pkg set main="./dist/utils.umd.cjs"
+  npm pkg set module="./dist/utils.js"
+  npm pkg set types="./dist/main.d.ts"
+  cd ../..
+  ```
+
+  - Add libs/utils/vite.config.ts
+
+  ```javascript
+  import { resolve } from 'path';
+  import { defineConfig } from 'vite';
+  import dts from 'vite-plugin-dts';
+
+  export default defineConfig({
+    build: { lib: { entry: resolve(__dirname, 'src/main.ts'), name: 'utils' } },
+    plugins: [dts()],
+  });
+  ```
