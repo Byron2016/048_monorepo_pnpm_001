@@ -85,7 +85,8 @@ We are going to use
 
   ```bash
   touch .prettierignore
-  echo "coverage \npublic
+  echo "coverage
+  public
   dist
   pnpm-workspace.yaml
   pnpm-lock.yaml" > .prettierignore
@@ -166,4 +167,31 @@ We are going to use
   npm pkg set scripts.lint:nofix="eslint ."
   npm pkg set scripts.lint="eslint . --fix"
   npm pkg set scripts.lint:inspect:write="eslint --inspect-config"
+  ```
+
+- Install husky and lint-staged
+
+  - Add husky and lint-staged dev dependency
+
+  ```bash
+  pnpm add -D husky lint-staged
+  ```
+
+  ```bash
+  npx husky init
+  node --eval "fs.writeFileSync('.husky/pre-commit','pnpm exec lint-staged\n')"
+  ```
+
+  - Update package.json
+
+  ```json
+  {
+    ....
+    "lint-staged": {
+      "**/*.{js,ts,tsx}": [
+        "eslint --fix"
+      ],
+      "**/*": "prettier --write   --ignore-unknown"
+    }
+  }
   ```
