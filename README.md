@@ -73,4 +73,37 @@ We are going to use
   pnpm init
   ```
 
--
+- Prettier
+
+  - Add prettier dev dependency
+
+  ```bash
+  pnpm add -D prettier
+  ```
+
+      - Add .prettierignore file
+
+  ```bash
+  touch .prettierignore
+  echo "coverage \npublic
+  dist
+  pnpm-workspace.yaml
+  pnpm-lock.yaml" > .prettierignore
+  ```
+
+  - Add .prettierrc file
+
+  ```bash
+  touch .prettierrc
+  echo "{
+  \"semi\": true,
+  \"singleQuote\": true
+  }" > .prettierrc
+  ```
+
+  - Add package.json scrpts
+
+  ```bash
+  npm pkg set scripts.format="pnpm prettier --check"
+  npm pkg set scripts.format:write="pnpm prettier --write"
+  ```
