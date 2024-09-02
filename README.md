@@ -26,7 +26,7 @@
 # Project Description
 
 **048_monorepo_pnpm_001"** is a practice to build a **PNPM Monorepo** following Youtube
-Mohit Kumar Toshniwal's tutorial [Build a Monorepo using PNPM workspace, React, Vue, Node, Eslint, Prettier and Typescript](https://www.youtube.com/watch?v=pz4f9Q6VYZA)
+Mohit Kumar Toshniwal's tutorial [Build a Monorepo using PNPM workspace, React, Vue, Node, Eslint, Prettier and Typescript](https://www.youtube.com/watch?v=pz4f9Q6VYZA) [Github](https://github.com/mohitkumartoshniwal/monorepo/tree/main)
 and the other help that you can find into **Reference** section.
 
 # Technology stack
@@ -204,7 +204,7 @@ We are going to use
     touch pnpm-workspace.yaml
     echo "packages:
   - 'apps/*'
-  - 'packages/*'" > pnpm-workspace.yaml
+  - 'libs/*'" > pnpm-workspace.yaml
 
   ```
 
@@ -267,7 +267,7 @@ We are going to use
     if (data === null || data === undefined) {
       return 'It is Empty';
     }
-    return 'It is Empty';
+    return 'It is not Empty';
   };
   ```
 
@@ -302,3 +302,140 @@ We are going to use
     plugins: [dts()],
   });
   ```
+
+  - backend (19.19)
+
+    - Create backend folder
+
+    ```bash
+      cd apps && mkdir backend && cd backend
+      pnpm init
+      npm pkg set type="module"
+      cd ../..
+
+    ```
+
+    - Add ./apps/backend/tsconfig.json file
+
+    ```bash
+      cd apps/backend
+      npx tsc --init
+
+    ```
+
+    ```json
+    {
+      "compilerOptions": {
+        "module": "ES2020",
+        "moduleResolution": "Node16",
+        "target": "ES2020",
+        "sourceMap": true,
+        "outDir": "dist",
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "strict": true
+      },
+      "include": ["src/**/*"]
+    }
+    ```
+
+    - Add ./apps/backend/nodemon.json
+
+    ```json
+    {
+      "execMap": {
+        "ts": "ts-node-esm"
+      }
+    }
+    ```
+
+    - **Note:**:
+
+      - ts-node
+        - It is the same: "ts": "ts-node-esm" and "ts": "ts-node --esm"
+        - To call "ts-node-esm" generates a error, solve it with
+          - "tsOKa": "node --inspect --experimental-loader ts-node/esm",
+          - Or use tsx
+      - tsx
+        - "ts": "tsx"
+
+    - Add dependencies and dev dependencies
+
+    ```bash
+      cd apps/backend
+      pnpm i express cors
+      pnpm i -D @types/cors @types/express  @types/node ts-node
+      pnpm i -D tsx # to solve ts-node problem.
+      cd ../..
+
+    ```
+
+    - Add apps/backend/src/app.ts
+
+    ```bash
+      cd apps/backend
+      mkdir apps && touch app.ts
+      # cd ../..
+
+    ```
+
+    ```javascript
+    import express from 'express';
+    import cors from 'cors';
+    import utils from 'utils';
+
+    const PORT = process.env.PORT || 5000;
+
+    const app = express();
+
+    app.use(cors());
+
+    app.get('/', (req, res) => {
+      res.json({ message: utils.isEmpty('abc') });
+    });
+
+    app.listen(PORT, () => {
+      console.log(`Server running on PORT ${PORT}`);
+    });
+    ```
+
+    - Enable "libs/util" in apps/backend/package.json
+
+    ```json
+    {
+      ....
+      "dependencies" : {
+        ....
+        "utils": "workspace:*"
+      }
+    }
+
+    ```
+
+    - with code
+
+    ```bash
+      cd apps/backend
+      npm pkg set scripts.dev="nodemon src/app.ts"
+      pnpm i -D nodemon
+      cd ../..
+
+    ```
+
+    - Update dependencies
+
+    ```bash
+      cd apps/backend
+      pnpm i
+      cd ../..
+
+    ```
+
+    - Add typescript dev dependency to monorepo root package.json
+
+    ```bash
+      pnpm i -D typescript -w
+
+    ```
+
+    me quedo en 28 para empezar.

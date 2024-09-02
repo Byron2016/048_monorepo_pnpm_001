@@ -1,0 +1,7 @@
+{
+  "verbose": true,
+  "execMap": {
+    "ts": "tsx",
+    "tsOK": "node --inspect  --experimental-loader ts-node/esm"
+  }
+}
