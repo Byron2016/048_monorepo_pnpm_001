@@ -1,7 +1,8 @@
 {
   "verbose": true,
   "execMap": {
-    "ts": "tsx",
+    "tsTSX": "tsx",
+    "ts": "node --trace-deprecation --import ./ts-node.register.mjs",
     "tsOK": "node --inspect  --experimental-loader ts-node/esm"
   }
 }

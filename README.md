@@ -352,11 +352,39 @@ We are going to use
     - **Note:**:
 
       - ts-node
+
         - It is the same: "ts": "ts-node-esm" and "ts": "ts-node --esm"
         - To call "ts-node-esm" generates a error, solve it with
+
           - "tsOKa": "node --inspect --experimental-loader ts-node/esm",
+
             - [solve experimental-loader](https://github.com/TypeStrong/ts-node/issues/2100#issuecomment-2039564225)
+
+              - Create a ./apps/backend/ts-node.register.mjs file
+
+                ```javascript
+                import { pathToFileURL } from 'node:url';
+                import { register } from 'node:module';
+                register('ts-node/esm', pathToFileURL('./'));
+                ```
+
+              - Update ./apps/backend/nodemon.json file
+
+                ```json
+                {
+                  "verbose": true,
+                  "execMap": {
+                    "ts": "node --trace-deprecation --import ./ts-node.register.mjs"
+                  }
+                }
+                ```
+
+              - Warning message
+                - (node:22724) [DEP0180] DeprecationWarning: fs.Stats constructor is deprecated.
+                  - [NodeJS Warning: DeprecationWarning: fs.Stats constructor is deprecated](https://stackoverflow.com/questions/78591135/nodejs-warning-deprecationwarning-fs-stats-constructor-is-deprecated#answer-78591144)
+
           - Or use tsx
+
       - tsx
         - "ts": "tsx"
 
