@@ -355,6 +355,7 @@ We are going to use
         - It is the same: "ts": "ts-node-esm" and "ts": "ts-node --esm"
         - To call "ts-node-esm" generates a error, solve it with
           - "tsOKa": "node --inspect --experimental-loader ts-node/esm",
+            - [solve experimental-loader](https://github.com/TypeStrong/ts-node/issues/2100#issuecomment-2039564225)
           - Or use tsx
       - tsx
         - "ts": "tsx"
@@ -438,4 +439,159 @@ We are going to use
 
     ```
 
-    me quedo en 28 para empezar.
+  - backend (28)
+
+    - Create frontends' apps
+
+      - react-frontend app
+
+      ```bash
+        cd apps
+        pnpm create vite
+        # Project name: react-frontend
+        # Select a framework: React
+        # Select a variant: Typescript
+        cd react-frontend
+        pnpm i
+        pnpm run dev
+        cd ../..
+
+      ```
+
+      - vue-frontend app
+
+      ```bash
+        cd apps
+        pnpm create vite
+        # Project name: vue-frontend
+        # Select a framework: Vue
+        # Select a variant: Typescript
+        cd react-frontend
+        pnpm i
+        pnpm run dev
+        cd ../..
+
+      ```
+
+    - Enable "libs/util"
+
+      - in react-frontend app
+
+      ````json
+      {
+        ....
+        "dependencies" : {
+          ....
+          "utils": "workspace:*"
+        }
+      }
+
+
+      ```bash
+        cd apps/react-frontend
+        pnpm i
+        cd ../..
+      ````
+
+      - in vue-frontend app
+
+      ```json
+      {
+        ....
+        "dependencies" : {
+          ....
+          "utils": "workspace:*"
+        }
+      }
+
+      ```
+
+      ```bash
+        cd apps/vue-frontend
+        pnpm i
+        cd ../..
+      ```
+
+    - Fetch backend app and libs/utils
+
+      - from react-frontend app
+
+      ```javascript
+        // apps/react-frontend/src/App.tsx
+        ....
+        import { isEmpty } from 'utils';
+
+        function App() {
+          const [count, setCount] = useState(0);
+
+          useEffect(() => {
+            fetch('http://localhost:5000')
+              .then((data) => data.json())
+              .then((data) => console.log(data));
+          }, []);
+
+          return (
+            <>
+              ....
+              <pre>{isEmpty('abc')}</pre>
+              <pre>{isEmpty(null)}</pre>
+            </>
+          );
+        }
+
+        export default App;
+
+      ```
+
+      - from vue-frontend app
+
+      ```javascript
+        // apps/vue-frontend/src/App.vue
+
+        <script setup lang="ts">
+        ....
+        import { onMounted } from 'vue';
+        import { isEmpty } from 'utils';
+
+        onMounted(() => {
+          fetch('http://localhost:5000')
+            .then((data) => data.json())
+            .then((data) => console.log(data));
+        });
+        </script>
+
+        <template>
+          ....
+          <HelloWorld msg="Vite + Vue" />
+
+          <pre>{{ isEmpty('abc') }}</pre>
+          <pre>{{ isEmpty(null) }}</pre>
+        </template>
+
+        <style scoped>
+        ....
+        </style>
+
+
+      ```
+
+    - Add script to run ./package.json
+
+    ```json
+    {
+      ....
+      "scripts" : {
+        ....
+        dev="pnpm --parallel --stream -r run dev"
+      }
+    }
+
+    ```
+
+    - with code
+
+    ```bash
+      cd .
+      npm pkg set scripts.dev="pnpm --parallel --stream -r run dev"
+
+    ```

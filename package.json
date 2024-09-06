@@ -10,7 +10,8 @@
     "lint:nofix": "eslint .",
     "lint": "eslint . --fix",
     "lint:inspect:write": "eslint --inspect-config",
-    "prepare": "husky"
+    "prepare": "husky",
+    "dev": "pnpm --parallel --stream -r run dev"
   },
   "keywords": [],
   "author": "",
